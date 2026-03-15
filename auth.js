@@ -22,16 +22,16 @@ function showAppScreen(user) {
   const name   = document.getElementById("user-name");
   if (avatar) { avatar.src = user.photoURL || ""; avatar.style.display = user.photoURL ? "block" : "none"; }
   if (name)   { name.textContent = user.displayName || user.email || "User"; }
-  window.__user = user; window.dispatchEvent(new CustomEvent("userLoggedIn", { detail: { user } }));
+  window.__user = user;
+  window.dispatchEvent(new CustomEvent("userLoggedIn", { detail: { user } }));
 }
 
 function handleAuthError(error) {
+  const el = document.getElementById("auth-error");
   const messages = {
     "auth/unauthorized-domain": "Domain not authorized. Check Firebase Console.",
     "auth/network-request-failed": "Network error. Check your connection.",
-    "auth/account-exists-with-different-credential": "Account exists with different provider.",
   };
-  const el = document.getElementById("auth-error");
   if (el) { el.textContent = messages[error.code] || error.message; el.style.display = "block"; }
   console.error("Auth error:", error.code, error.message);
 }
@@ -55,16 +55,16 @@ async function logout() {
   showLoginScreen();
 }
 
-onAuthStateChanged(auth, (user) => {
-  if (user) { showAppScreen(user); } else { showLoginScreen(); }
-});
-
 document.addEventListener("DOMContentLoaded", async () => {
   await setPersistence(auth, browserLocalPersistence);
+
   try {
-    const result = await getRedirectResult(auth);
-    if (result) console.log("Redirect login:", result.user.displayName);
+    await getRedirectResult(auth);
   } catch (e) { handleAuthError(e); }
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) { showAppScreen(user); } else { showLoginScreen(); }
+  });
 
   const g = document.getElementById("btn-google");
   const f = document.getElementById("btn-facebook");

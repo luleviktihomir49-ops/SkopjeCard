@@ -429,4 +429,4 @@ function initApp() {
 }
 
 // Wait for auth before initialising app
-document.addEventListener("DOMContentLoaded", () => { window.addEventListener("userLoggedIn", () => initApp(), { once: true }); if (window.__user) initApp(); });
+window.addEventListener("userLoggedIn", () => initApp(), { once: true });
