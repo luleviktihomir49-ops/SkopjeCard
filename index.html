@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkinCard Designer</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- html2canvas for PNG export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════
+       LOGIN SCREEN
+  ══════════════════════════════════════════════ -->
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="login-logo-area">
+        <div class="login-logo-icon">SC</div>
+        <h1>SkinCard Designer</h1>
+        <p class="login-subtitle">Create AI-powered skin trading cards</p>
+      </div>
+
+      <div id="auth-error" class="auth-error" style="display:none;"></div>
+
+      <div class="login-buttons">
+        <button id="btn-google" class="btn-auth btn-google">
+          <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </button>
+
+        <button id="btn-facebook" class="btn-auth btn-facebook">
+          <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="#1877F2"/>
+          </svg>
+          Continue with Facebook
+        </button>
+      </div>
+
+      <p class="login-footer">
+        By signing in you agree to our Terms of Service.<br/>
+        Your session is saved locally — no passwords stored.
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       APP SCREEN
+  ══════════════════════════════════════════════ -->
+  <div id="app-screen" style="display:none;">
+
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="header-logo-icon">SC</div>
+        <span class="header-title">SkinCard Designer</span>
+      </div>
+      <div class="header-right">
+        <button id="api-key-badge" class="badge-btn" title="Change API Key">
+          <span id="api-key-status">🔑 No API Key</span>
+        </button>
+        <div id="user-info" class="user-info">
+          <img id="user-avatar" src="" alt="avatar" class="user-avatar" />
+          <span id="user-name"></span>
+        </div>
+        <button id="btn-logout" class="btn-logout">Log out</button>
+      </div>
+    </header>
+
+    <!-- Main layout -->
+    <main class="app-main">
+
+      <!-- Sidebar / Controls -->
+      <aside class="sidebar">
+
+        <section class="panel">
+          <h3 class="panel-title">Card Style</h3>
+          <div class="style-options">
+            <button class="style-btn active" data-style="standard">Standard</button>
+            <button class="style-btn" data-style="black">Black</button>
+            <button class="style-btn" data-style="gold">Gold</button>
+            <button class="style-btn" data-style="holographic">Holo</button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h3 class="panel-title">Skin Details</h3>
+
+          <div class="form-group">
+            <label for="skin-name">Skin Name</label>
+            <input type="text" id="skin-name" placeholder="e.g. Dragon Lore" />
+          </div>
+
+          <div class="form-group">
+            <label for="skin-tier">Tier / Rarity</label>
+            <select id="skin-tier">
+              <option value="">— select —</option>
+              <option value="Consumer Grade">Consumer Grade</option>
+              <option value="Industrial Grade">Industrial Grade</option>
+              <option value="Mil-Spec">Mil-Spec</option>
+              <option value="Restricted">Restricted</option>
+              <option value="Classified">Classified</option>
+              <option value="Covert">Covert</option>
+              <option value="Contraband">Contraband</option>
+              <option value="Legendary">Legendary</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="skin-type">Weapon / Item Type</label>
+            <select id="skin-type">
+              <option value="">— select —</option>
+              <option value="Rifle">Rifle</option>
+              <option value="Sniper Rifle">Sniper Rifle</option>
+              <option value="Pistol">Pistol</option>
+              <option value="SMG">SMG</option>
+              <option value="Shotgun">Shotgun</option>
+              <option value="Knife">Knife</option>
+              <option value="Gloves">Gloves</option>
+              <option value="Sticker">Sticker</option>
+              <option value="Agent">Agent</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="skin-theme">Theme / Lore</label>
+            <input type="text" id="skin-theme" placeholder="e.g. mythical beast, neon city" />
+          </div>
+
+          <div class="form-group">
+            <label for="skin-colors">Colors</label>
+            <input type="text" id="skin-colors" placeholder="e.g. crimson, gold, black" />
+          </div>
+
+          <div class="form-group">
+            <label for="skin-wear">Wear Condition</label>
+            <select id="skin-wear">
+              <option value="">— select —</option>
+              <option value="Factory New">Factory New (FN)</option>
+              <option value="Minimal Wear">Minimal Wear (MW)</option>
+              <option value="Field-Tested">Field-Tested (FT)</option>
+              <option value="Well-Worn">Well-Worn (WW)</option>
+              <option value="Battle-Scarred">Battle-Scarred (BS)</option>
+            </select>
+          </div>
+
+          <button id="btn-generate" class="btn-generate">
+            <span id="generate-label">✨ Generate Card</span>
+            <span id="generate-spinner" class="spinner" style="display:none;"></span>
+          </button>
+        </section>
+
+      </aside>
+
+      <!-- Card Canvas -->
+      <div class="canvas-area">
+        <div class="canvas-wrapper">
+          <div id="card-preview" class="card card-standard">
+            <div class="card-bg"></div>
+            <div class="card-shine"></div>
+
+            <div class="card-top-row">
+              <div class="card-game-label">CS2 SKIN</div>
+              <div id="card-tier-badge" class="card-tier-badge">—</div>
+            </div>
+
+            <div class="card-center">
+              <div id="card-art-area" class="card-art-area">
+                <div class="card-art-placeholder">
+                  <span>Card art will appear here</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-bottom">
+              <div id="card-skin-name" class="card-skin-name">SKIN NAME</div>
+              <div id="card-weapon-type" class="card-weapon-type">Weapon Type</div>
+
+              <div class="card-stats-row">
+                <div class="card-stat">
+                  <span class="stat-label">WEAR</span>
+                  <span id="card-wear" class="stat-value">—</span>
+                </div>
+                <div class="card-stat">
+                  <span class="stat-label">FLOAT</span>
+                  <span id="card-float" class="stat-value">—</span>
+                </div>
+                <div class="card-stat">
+                  <span class="stat-label">PATTERN</span>
+                  <span id="card-pattern" class="stat-value">—</span>
+                </div>
+              </div>
+
+              <div class="card-description-area">
+                <p id="card-description" class="card-description">Fill in the skin details and click Generate Card to create your trading card.</p>
+              </div>
+
+              <div class="card-chip-row">
+                <div class="card-chip">
+                  <div class="chip-lines">
+                    <div></div><div></div><div></div>
+                  </div>
+                </div>
+                <div id="card-number" class="card-number">•••• •••• •••• ••••</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="canvas-controls">
+          <button id="btn-download" class="btn-control">⬇ Download PNG</button>
+          <button id="btn-reset" class="btn-control btn-secondary">↺ Reset</button>
+        </div>
+
+        <div id="gen-error" class="gen-error" style="display:none;"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       API KEY MODAL
+  ══════════════════════════════════════════════ -->
+  <div id="api-key-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-icon">🔑</div>
+      <h2>OpenAI API Key Required</h2>
+      <p>Your key is stored only in this browser tab (sessionStorage) and never sent to any server other than OpenAI.</p>
+      <div class="form-group">
+        <label for="api-key-input">API Key</label>
+        <input type="password" id="api-key-input" placeholder="sk-..." autocomplete="off" />
+      </div>
+      <div id="modal-error" class="auth-error" style="display:none;"></div>
+      <div class="modal-buttons">
+        <button id="btn-save-key" class="btn-generate">Save &amp; Continue</button>
+        <button id="btn-cancel-key" class="btn-control btn-secondary">Cancel</button>
+      </div>
+      <p class="modal-note">
+        Need a key? Get one at <strong>platform.openai.com</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- ES Module scripts -->
+  <script type="module" src="auth.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
