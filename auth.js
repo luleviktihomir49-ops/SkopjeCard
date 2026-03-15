@@ -22,7 +22,7 @@ function showAppScreen(user) {
   const name   = document.getElementById("user-name");
   if (avatar) { avatar.src = user.photoURL || ""; avatar.style.display = user.photoURL ? "block" : "none"; }
   if (name)   { name.textContent = user.displayName || user.email || "User"; }
-  window.dispatchEvent(new CustomEvent("userLoggedIn", { detail: { user } }));
+  window.__user = user; window.dispatchEvent(new CustomEvent("userLoggedIn", { detail: { user } }));
 }
 
 function handleAuthError(error) {
